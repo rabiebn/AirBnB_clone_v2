@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""HBNB route"""
+"""C is fun! route"""
 
 from flask import Flask
 
@@ -15,6 +15,18 @@ def hello():
 @app.route("/hbnb", strict_slashes=False)
 def hbnb():
     return "HBNB"
+
+
+@app.route("/c/<text>", strict_slashes=False)
+def cisfun(text):
+    txt = ""
+    for char in text:
+        if char == '_':
+            txt += ' '
+        else:
+            txt += char
+
+    return "C {}".format(txt)
 
 
 if __name__ == '__main__':
