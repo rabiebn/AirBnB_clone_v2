@@ -23,5 +23,12 @@ def cisfun(text):
     return "C {}".format(txt)
 
 
+@app.route("/python", strict_slashes=False)
+@app.route("/python/<text>", strict_slashes=False)
+def pythoniscool(text='is cool'):
+    txt = text.replace('_', ' ')
+    return "Python {}".format(txt)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
