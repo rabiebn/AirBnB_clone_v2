@@ -10,24 +10,24 @@ Base = declarative_base()
 
 class BaseModel:
     """A base class for all hbnb models"""
-    id = Column(String(60), primary_key=True)
+    id = Column(String(60), primary_key=True, nullable=False, unique=True)
     created_at = Column(DateTime, nullable=False, default=datetime.now())
-    updated_at = Column(DateTime, nullable=False, default=datetime.now())
+    updated_at = Column(DateTime, nullable=False, default=datetime.now(),
+                        onupdate=datetime.now())
 
-    def __init__(self, *args, **kwargs):
-        """Instatntiates a new model"""
-        if not kwargs:
-            from models import storage
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-        else:
-            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-            del kwargs['__class__']
-            self.__dict__.update(kwargs)
+    def __init__(self, *args, **kwargs) -> None:
+        """Initialization of BaseModel Class"""
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+        if kwargs:
+            for key, value in kwargs.items():
+                if key in ["created_at", "updated_at"]:
+                    date = datetime.strptime(
+                        value, "%Y-%m-%dT%H:%M:%S.%f")
+                    setattr(self, key, date)
+                elif key != "__class__":
+                    setattr(self, key, value)
 
     def __str__(self):
         """Returns a string representation of the instance"""
